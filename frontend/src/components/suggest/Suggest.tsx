@@ -1,9 +1,10 @@
 import React, {FormEventHandler, useEffect, useState} from 'react';
 import axios from 'axios';
+import {Theme} from '../../model/theme';
 
 function Suggest() {
     const [theme, setTheme] = useState("");
-    const [themes, setThemes] = useState([]);
+    const [themes, setThemes] = useState<Theme[]>([]);
 
     useEffect(() => {
         axios.get('/api/themes')

@@ -2,6 +2,8 @@ import * as functions from 'firebase-functions';
 import * as express from 'express';
 import * as admin from 'firebase-admin';
 
+admin.initializeApp();
+
 const app = express();
 const router = express.Router();
 
@@ -23,7 +25,7 @@ router.post('/theme', async (request, response) => {
 router.get('/themes', async (request, response) => {
   functions.logger.info('Getting all themes');
 
-  const snapshot = await admin.firestore().collection('events').get()
+  const snapshot = await admin.firestore().collection('theme').get()
   response.json(snapshot.docs.map(doc => doc.data()));
 })
 
