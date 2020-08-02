@@ -1,20 +1,24 @@
-import React, {useEffect, useState} from 'react';
-import './App.css';
-import axios from 'axios'
+import React from 'react';
+import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
+import Home from './components/home/Home';
+import Vote from './components/vote/Vote';
+import Suggest from './components/suggest/Suggest';
 
 function App() {
-
-  const [message, setMessage] = useState("");
-
-  useEffect(() => {
-    axios.get('/api/hello-world')
-        .then(response => setMessage(response.data))
-  }, [])
-
   return (
-    <div className="App">
-        <p>{message}</p>
-    </div>
+    <Router>
+      <Switch>
+        <Route path="/suggest">
+          <Suggest />
+        </Route>
+        <Route path="/vote">
+          <Vote />
+        </Route>
+        <Route path="/">
+          <Home />
+        </Route>
+      </Switch>
+    </Router>
   );
 }
 
