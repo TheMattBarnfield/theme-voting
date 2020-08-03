@@ -1,15 +1,10 @@
-import React, {FormEventHandler, useEffect, useState} from 'react';
+import React, {FormEventHandler, useState} from 'react';
 import axios from 'axios';
-import {Theme} from '../../model/theme';
+import Button from 'react-bootstrap/Button'
+import Form from 'react-bootstrap/Form'
 
 function Suggest() {
     const [theme, setTheme] = useState("");
-    const [themes, setThemes] = useState<Theme[]>([]);
-
-    useEffect(() => {
-        axios.get('/api/themes')
-            .then(res => setThemes(res.data));
-    }, []);
 
     const handleSubmit: FormEventHandler = event => {
         event.preventDefault();
@@ -20,17 +15,23 @@ function Suggest() {
     }
 
     return (
-        <div>
-            <h1>Suggest a theme!</h1>
-            <form onSubmit={handleSubmit}>
-                <input value={theme} onChange={event => setTheme(event.target.value)}/>
-                <button>Submit theme suggestion</button>
-            </form>
-            <h2>Themes already suggested:</h2>
-            <ul>
-                {themes.map(t => <li>{t.theme}</li>)}
-            </ul>
-        </div>
+        <Form onSubmit={handleSubmit}>
+            <Form.Group controlId="theme-suggestion">
+                <Form.Label as="h1">
+                    Suggest a theme!
+                </Form.Label>
+                <Form.Control
+                    type="text"
+                    size="lg"
+                    placeholder="Your awesome theme suggestion"
+                    value={theme}
+                    onChange={e => setTheme(e.target.value)}
+                />
+            </Form.Group>
+            <Button variant="primary" type="submit">
+                Submit theme suggestion
+            </Button>
+        </Form>
     );
 }
 
