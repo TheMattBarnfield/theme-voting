@@ -6,32 +6,39 @@ import Suggest from './components/suggest/Suggest';
 import Navbar from 'react-bootstrap/Navbar'
 import Nav from 'react-bootstrap/Nav'
 import './App.scss'
+import {LinkContainer} from 'react-router-bootstrap';
 
 function App() {
   return (
-    <div>
+    <Router>
       <Navbar bg="primary" variant="dark">
-        <Navbar.Brand href="#home">SoftJamGameWire</Navbar.Brand>
+        <LinkContainer to="/home">
+          <Navbar.Brand>SoftJamGameWire</Navbar.Brand>
+        </LinkContainer>
         <Nav className="mr-auto">
-          <Nav.Link href="/home">Home</Nav.Link>
-          <Nav.Link href="/suggest">Suggest a theme</Nav.Link>
-          <Nav.Link href="/vote">Vote on themes</Nav.Link>
+          <LinkContainer to="/home">
+            <Nav.Link>Home</Nav.Link>
+          </LinkContainer>
+          <LinkContainer to="/suggest">
+            <Nav.Link>Suggest a theme</Nav.Link>
+          </LinkContainer>
+          <LinkContainer to="/vote">
+            <Nav.Link>Vote on themes</Nav.Link>
+          </LinkContainer>
         </Nav>
       </Navbar>
-      <Router>
-        <Switch>
-          <Route path="/suggest">
-            <Suggest />
-          </Route>
-          <Route path="/vote">
-            <Vote />
-          </Route>
-          <Route path="/">
-            <Home />
-          </Route>
-        </Switch>
-      </Router>
-    </div>
+      <Switch>
+        <Route path="/suggest">
+          <Suggest />
+        </Route>
+        <Route path="/vote">
+          <Vote />
+        </Route>
+        <Route path="/">
+          <Home />
+        </Route>
+      </Switch>
+    </Router>
   );
 }
 
