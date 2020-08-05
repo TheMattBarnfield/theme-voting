@@ -1,14 +1,17 @@
 import React from 'react';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
-import Home from './components/home/Home';
-import Vote from './components/vote/Vote';
-import Suggest from './components/suggest/Suggest';
+import Home from './components/pages/home/Home';
+import Vote from './components/pages/vote/Vote';
+import Suggest from './components/pages/suggest/Suggest';
 import Navbar from 'react-bootstrap/Navbar'
 import Nav from 'react-bootstrap/Nav'
 import './App.scss'
 import {LinkContainer} from 'react-router-bootstrap';
+import ThemeClient from './client/themeClient';
 
 function App() {
+  const themeClient = new ThemeClient();
+
   return (
     <Router>
       <Navbar bg="primary" variant="dark">
@@ -32,7 +35,7 @@ function App() {
           <Suggest />
         </Route>
         <Route path="/vote">
-          <Vote />
+          <Vote getUnvotedTheme={() => themeClient.getUnvotedTheme()}/>
         </Route>
         <Route path="/">
           <Home />

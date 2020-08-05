@@ -1,0 +1,19 @@
+@import "~bootstrap/scss/_functions.scss";
+@import "~bootstrap/scss/_variables.scss";
+@import "~bootstrap/scss/mixins/_breakpoints.scss";
+
+h1.vote-theme {
+    font-size: 3rem;
+    margin-top: 5rem;
+    margin-bottom: 5rem;
+}
+
+@include media-breakpoint-up(md) {
+    h1.vote-theme {
+        font-size: 5rem;
+        margin-top: 7.5rem;
+        margin-bottom: 10rem;
+    }
+}
+
+
