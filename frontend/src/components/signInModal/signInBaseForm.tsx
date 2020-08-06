@@ -1,4 +1,4 @@
-import React, {JSXElementConstructor, ReactElement} from "react";
+import React, {ReactElement} from "react";
 
 interface SignInBaseFormProps {
     children: ReactElement;
