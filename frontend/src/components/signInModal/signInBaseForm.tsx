@@ -1,7 +1,7 @@
 import React, {JSXElementConstructor, ReactElement} from "react";
 
 interface SignInBaseFormProps {
-    children: ReactElement<any, string | JSXElementConstructor<any>>;
+    children: ReactElement;
     formError: string | null;
 }
 

@@ -11,7 +11,13 @@ interface TopNavbarProps {
 }
 
 const handleSignOut = () => {
-    auth.signOut();
+    auth.signOut()
+        .then(() => {
+            console.log('User signed out');
+        })
+        .catch(() => {
+            console.log('Error signing user out');
+        });
 }
 
 const TopNavbar: React.FC<TopNavbarProps> = ({handleSignInModalOpen}) => {

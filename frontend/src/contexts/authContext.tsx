@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {User} from "firebase";
 import {auth} from "../firebase";
+
 // import {auth} from '../firebase';
 
 interface IAuthContextProps {
