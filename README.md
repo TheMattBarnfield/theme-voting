@@ -1,3 +1,5 @@
+![firebase-deploy](https://github.com/TheMattBarnfield/theme-voting/workflows/firebase-deploy/badge.svg?branch=master)
+
 # Theme voting app for SoftJamGameWire
 
 ## Setup
