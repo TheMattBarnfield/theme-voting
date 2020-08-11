@@ -34,7 +34,7 @@ const Vote: React.FC = () => {
                 </Row>
                 <Row noGutters>
                     <Col className="text-right">
-                        <Button size="lg" onClick={vote(likeTheme)} variant="danger">
+                        <Button size="lg" onClick={vote(dislikeTheme)} variant="danger">
                             Hate it!
                         </Button>
                     </Col>
@@ -44,7 +44,7 @@ const Vote: React.FC = () => {
                         </Button>
                     </Col>
                     <Col className="text-left">
-                        <Button size="lg" onClick={vote(dislikeTheme)} variant="primary">
+                        <Button size="lg" onClick={vote(likeTheme)} variant="primary">
                             Love it!
                         </Button>
                     </Col>

@@ -7,5 +7,5 @@ const callFunction = (name: string, data?: any): Promise<Theme> => {
 
 export const getUnvotedTheme = () => callFunction('getTheme');
 export const likeTheme = (id: string) => callFunction('likeTheme', {id});
-export const dislikeTheme = (id: string) => callFunction('getTheme', {id});
-export const skipTheme = (id: string) => callFunction('getTheme', {id});
+export const dislikeTheme = (id: string) => callFunction('dislikeTheme', {id});
+export const skipTheme = (id: string) => callFunction('skipTheme', {id});
