@@ -27,9 +27,9 @@ router.post('/theme', async (request, response) => {
     const sanitisedTheme = theme.replace(/[^a-zA-Z0-9 ]/g, "")
 
     const themeToAdd: Theme ={
-            sanitisedTheme,
-            likes: 0,
-            dislikes: 0,
+        theme: sanitisedTheme,
+        likes: 0,
+        dislikes: 0,
         uids: []
     }
 
