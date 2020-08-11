@@ -1,9 +1,12 @@
-import * as functions from 'firebase-functions';
-import * as express from 'express';
-import * as admin from 'firebase-admin';
+import functions from 'firebase-functions';
+import express from 'express';
+import admin from 'firebase-admin';
 import Vote from './vote'
-import {Theme} from './theme';
+import {Theme, ThemeResponse} from './theme';
 import {getAuthFromContext} from './firebase-auth';
+import minBy from 'lodash/minBy';
+import DocumentData = admin.firestore.DocumentData;
+import QueryDocumentSnapshot = admin.firestore.QueryDocumentSnapshot;
 
 admin.initializeApp();
 
@@ -26,7 +29,7 @@ router.post('/theme', async (request, response) => {
     // This regex is coupled with the Suggest.tsx in the frontend
     const sanitisedTheme = theme.replace(/[^a-zA-Z0-9 ]/g, "")
 
-    const themeToAdd: Theme ={
+    const themeToAdd: Theme = {
         theme: sanitisedTheme,
         likes: 0,
         dislikes: 0,
@@ -62,12 +65,43 @@ export const likeTheme = functions.https.onCall(async (data, context) => {
     const auth = getAuthFromContext(context);
     functions.logger.info("Auth: ", auth);
     await vote.voteTheme(data.themeId, auth, 'likes');
-    return {nextTheme: 'nextTheme'}
+    return getUnvotedTheme(auth.uid)
 })
 
 export const dislikeTheme = functions.https.onCall(async (data, context) => {
     const auth = getAuthFromContext(context)
     await vote.voteTheme(data, auth, 'dislikes');
-    return {nextTheme: 'nextTheme'}
+    return getUnvotedTheme(auth.uid)
 })
 
+export const skipTheme = functions.https.onCall(async (data, context) => {
+    const auth = getAuthFromContext(context)
+    await vote.voteTheme(data, auth);
+    return getUnvotedTheme(auth.uid)
+})
+
+export const getTheme = functions.https.onCall(async (data, context) => {
+    const auth = getAuthFromContext(context)
+    return getUnvotedTheme(auth.uid)
+})
+
+const getUnvotedTheme = async (uid: string): Promise<ThemeResponse> => {
+    const {docs} = await db.collection('theme').get()
+    const unvotedThemes = docs.filter(doc => {
+        const uids: string[] | undefined = doc.data()['uids']
+        return !uids?.includes(uid);
+    });
+    const themeDoc: QueryDocumentSnapshot<DocumentData> | undefined = minBy(unvotedThemes, doc => doc.data()['uids'].length)
+
+    if (!themeDoc) {
+        return {
+            id: 'no-new-themes',
+            theme: 'You have voted on every theme!'
+        }
+    }
+
+    return {
+        id: themeDoc.id,
+        theme: themeDoc.data()['theme']
+    }
+}

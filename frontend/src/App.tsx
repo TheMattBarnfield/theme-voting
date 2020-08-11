@@ -7,14 +7,9 @@ import './App.scss'
 import ProviderCollection from "./contexts/providerCollection";
 import TopNavbar from "./components/misc/navbar";
 import SignInModal from "./components/signInModal/signInModal";
-import ThemeClient from './client/themeClient';
-import Button from 'react-bootstrap/Button'
-import {functions} from "./firebase";
-
 
 function App() {
     const [signInModalShowing, setSignInModalShowing] = useState(false);
-    const themeClient = new ThemeClient();
 
     const handleSignInModalOpen = () => {
         setSignInModalShowing(true);
@@ -24,28 +19,20 @@ function App() {
         setSignInModalShowing(false);
     }
 
-    const handleUpVoteClick = () => {
-        const upVoteTheme = functions.httpsCallable('likeTheme');
-        upVoteTheme({themeId: 'SKvT8DQQzXoCnhKDPCen'}).then((result) => {
-            console.log(result.data)
-        });
-    }
-
     return (
         <ProviderCollection>
             <Router>
                 <TopNavbar handleSignInModalOpen={handleSignInModalOpen}/>
                 <SignInModal isOpen={signInModalShowing} handleClose={handleSignInModalClose}/>
-                <Button onClick={handleUpVoteClick}>Upvote</Button>
                 <Switch>
                     <Route path="/suggest">
-                        <Suggest/>
+                        <Suggest />
                     </Route>
                     <Route path="/vote">
-                        <Vote getUnvotedTheme={() => themeClient.getUnvotedTheme()}/>
+                        <Vote />
                     </Route>
                     <Route path="/">
-                        <Home/>
+                        <Home />
                     </Route>
                 </Switch>
             </Router>

@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Theme} from '../../../model/theme';
 import Button from 'react-bootstrap/Button';
 import LoadingSpinner from '../../loadingSpinner/LoadingSpinner';
@@ -6,25 +6,23 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import './Vote.scss';
+import {likeTheme, dislikeTheme, getUnvotedTheme, skipTheme} from '../../../client/votingClient';
 
-interface Props {
-    getUnvotedTheme: () => Promise<Theme>
-}
-
-const Vote: React.FC<Props> = ({getUnvotedTheme}) => {
+const Vote: React.FC = () => {
     const [theme, setTheme] = useState<Theme>()
 
-    const loadTheme = useCallback(() => {
-        setTheme(undefined);
-        setTimeout(() =>
-            getUnvotedTheme().then(setTheme),
-            500
-        );
-    }, [getUnvotedTheme]);
+    const vote = (f: (id: string) => Promise<Theme>) => () => {
+        if (!theme) {
+            return;
+        }
+        const id = theme.id
+        setTheme(undefined)
+        f(id).then(setTheme)
+    }
 
     useEffect(() => {
-        loadTheme();
-    }, [loadTheme])
+        getUnvotedTheme().then(setTheme);
+    }, [])
 
     return (
         <Container className="text-center pt-5 pb-5">
@@ -36,17 +34,17 @@ const Vote: React.FC<Props> = ({getUnvotedTheme}) => {
                 </Row>
                 <Row noGutters>
                     <Col className="text-right">
-                        <Button size="lg" onClick={loadTheme} variant="danger">
+                        <Button size="lg" onClick={vote(likeTheme)} variant="danger">
                             Hate it!
                         </Button>
                     </Col>
                     <Col className="text-center">
-                        <Button size="lg" onClick={loadTheme} variant="outline-secondary">
+                        <Button size="lg" onClick={vote(skipTheme)} variant="outline-secondary">
                             Skip
                         </Button>
                     </Col>
                     <Col className="text-left">
-                        <Button size="lg" onClick={loadTheme} variant="primary">
+                        <Button size="lg" onClick={vote(dislikeTheme)} variant="primary">
                             Love it!
                         </Button>
                     </Col>

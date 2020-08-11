@@ -1,32 +1,29 @@
-import * as functions from 'firebase-functions';
-import * as admin from 'firebase-admin';
+import functions from 'firebase-functions';
+import admin from 'firebase-admin';
 import FieldValue = admin.firestore.FieldValue;
 import DocumentReference = admin.firestore.DocumentReference;
 import Firestore = admin.firestore.Firestore;
 import {FirebaseAuth} from './firebase-auth';
+import {ThemeId} from './theme';
 
 export default class Vote {
     constructor(private readonly db: Firestore) {}
 
-    public async voteTheme(themeId: string, auth: FirebaseAuth, keyToIncrement: 'likes' | 'dislikes'): Promise<void> {
-        const uid = auth.uid;
-        const themeRef = this.db.collection('theme').doc(themeId);
+    public async voteTheme({id}: ThemeId, {uid}: FirebaseAuth, keyToIncrement?: 'likes' | 'dislikes'): Promise<FirebaseFirestore.WriteResult> {
+        const themeRef = this.db.collection('theme').doc(id);
 
         if (await Vote.alreadyVoted(uid, themeRef)) {
             throw new functions.https.HttpsError('failed-precondition', 'You have already voted on this theme');
         }
 
-        functions.logger.info("About to update")
-
-        const updateData = {
+        const updateData = keyToIncrement ? {
             [keyToIncrement]: Vote.increment(),
+            uids: Vote.appendUid(uid)
+        } : {
             uids: Vote.appendUid(uid)
         };
 
-        themeRef.update(updateData)
-            .catch((err) => {
-                throw new functions.https.HttpsError('unknown', err)
-            });
+        return themeRef.update(updateData);
     }
 
     private static increment(): FieldValue {
