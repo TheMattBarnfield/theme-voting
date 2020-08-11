@@ -1,0 +1,22 @@
+.home .jumbotron {
+    background-image: url("homepage-splash.jpg");
+    background-size: cover;
+    background-position: center;
+    border-radius: 0;
+    padding-top: 10rem;
+    padding-bottom: 0.5rem;
+    color: antiquewhite;
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    @media (min-width: 576px) {
+        padding-top: 12rem;
+        padding-bottom: 1rem;
+
+        h1 {
+            font-size: 2.5rem;
+        }
+    }
+}
