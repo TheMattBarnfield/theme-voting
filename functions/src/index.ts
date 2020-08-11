@@ -60,7 +60,7 @@ export const api = functions
     .https
     .onRequest(app as any);
 
-export const likeTheme = functions.https.onCall(async (data, context) => {
+exports.likeTheme = functions.https.onCall(async (data, context) => {
     functions.logger.info("Liking: ", data)
     const auth = getAuthFromContext(context);
     functions.logger.info("Auth: ", auth);
@@ -68,19 +68,19 @@ export const likeTheme = functions.https.onCall(async (data, context) => {
     return getUnvotedTheme(auth.uid)
 })
 
-export const dislikeTheme = functions.https.onCall(async (data, context) => {
+exports.dislikeTheme = functions.https.onCall(async (data, context) => {
     const auth = getAuthFromContext(context)
     await vote.voteTheme(data, auth, 'dislikes');
     return getUnvotedTheme(auth.uid)
 })
 
-export const skipTheme = functions.https.onCall(async (data, context) => {
+exports.skipTheme = functions.https.onCall(async (data, context) => {
     const auth = getAuthFromContext(context)
     await vote.voteTheme(data, auth);
     return getUnvotedTheme(auth.uid)
 })
 
-export const getTheme = functions.https.onCall(async (data, context) => {
+exports.getTheme = functions.https.onCall(async (data, context) => {
     const auth = getAuthFromContext(context)
     return getUnvotedTheme(auth.uid)
 })

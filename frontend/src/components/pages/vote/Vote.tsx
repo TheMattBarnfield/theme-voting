@@ -12,7 +12,7 @@ const Vote: React.FC = () => {
     const [theme, setTheme] = useState<Theme>()
 
     const vote = (f: (id: string) => Promise<Theme>) => () => {
-        if (!theme) {
+        if (!theme || theme.id === 'no-new-themes') {
             return;
         }
         const id = theme.id
