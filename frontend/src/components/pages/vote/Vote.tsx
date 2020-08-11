@@ -35,7 +35,7 @@ const Vote: React.FC<Props> = ({getUnvotedTheme}) => {
                     </Col>
                 </Row>
                 <Row noGutters>
-                    <Col className="text-center">
+                    <Col className="text-right">
                         <Button size="lg" onClick={loadTheme} variant="danger">
                             Hate it!
                         </Button>
@@ -45,7 +45,7 @@ const Vote: React.FC<Props> = ({getUnvotedTheme}) => {
                             Skip
                         </Button>
                     </Col>
-                    <Col className="text-center">
+                    <Col className="text-left">
                         <Button size="lg" onClick={loadTheme} variant="primary">
                             Love it!
                         </Button>

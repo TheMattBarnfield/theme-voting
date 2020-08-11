@@ -52,5 +52,5 @@
     "@types/react-router-bootstrap": "^0.24.5",
     "@types/react-router-dom": "^5.1.5"
   },
-  "proxy": "http://localhost:5001/theme-voting/europe-west2"
+  "proxy": "http://localhost:5001/theme-voting/us-central1"
 }
