@@ -16,6 +16,8 @@ export default class Vote {
             throw new functions.https.HttpsError('failed-precondition', 'You have already voted on this theme');
         }
 
+        functions.logger.info("About to update")
+
         const updateData = {
             [keyToIncrement]: Vote.increment(),
             uids: Vote.appendUid(uid)

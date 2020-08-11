@@ -58,8 +58,10 @@ export const api = functions
     .onRequest(app as any);
 
 export const likeTheme = functions.https.onCall(async (data, context) => {
+    functions.logger.info("Liking: ", data)
     const auth = getAuthFromContext(context);
-    await vote.voteTheme(data, auth, 'likes');
+    functions.logger.info("Auth: ", auth);
+    await vote.voteTheme(data.themeId, auth, 'likes');
     return {nextTheme: 'nextTheme'}
 })
 
