@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Theme} from '../../../model/theme';
 import Button from 'react-bootstrap/Button';
 import LoadingSpinner from '../../loadingSpinner/LoadingSpinner';
@@ -7,9 +7,11 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import './Vote.scss';
 import {likeTheme, dislikeTheme, getUnvotedTheme, skipTheme} from '../../../client/votingClient';
+import AuthContext from '../../../contexts/authContext';
 
 const Vote: React.FC = () => {
     const [theme, setTheme] = useState<Theme>()
+    const auth = useContext(AuthContext);
 
     const vote = (f: (id: string) => Promise<Theme>) => () => {
         if (!theme || theme.id === 'no-new-themes') {
@@ -21,8 +23,16 @@ const Vote: React.FC = () => {
     }
 
     useEffect(() => {
-        getUnvotedTheme().then(setTheme);
-    }, [])
+        if (auth.user) {
+            getUnvotedTheme().then(setTheme);
+        }
+    }, [auth])
+
+    if (!auth.user) {
+        return <Container className="text-center pt-5 pb-5">
+            <h1>Log in to vote on themes</h1>
+        </Container>
+    }
 
     return (
         <Container className="text-center pt-5 pb-5">
