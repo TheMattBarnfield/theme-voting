@@ -60,31 +60,6 @@ export const api = functions
     .https
     .onRequest(app as any);
 
-exports.likeTheme = functions.https.onCall(async (data, context) => {
-    functions.logger.info("Liking: ", data)
-    const auth = getAuthFromContext(context);
-    functions.logger.info("Auth: ", auth);
-    await vote.voteTheme(data.themeId, auth, 'likes');
-    return getUnvotedTheme(auth.uid)
-})
-
-exports.dislikeTheme = functions.https.onCall(async (data, context) => {
-    const auth = getAuthFromContext(context)
-    await vote.voteTheme(data, auth, 'dislikes');
-    return getUnvotedTheme(auth.uid)
-})
-
-exports.skipTheme = functions.https.onCall(async (data, context) => {
-    const auth = getAuthFromContext(context)
-    await vote.voteTheme(data, auth);
-    return getUnvotedTheme(auth.uid)
-})
-
-exports.getTheme = functions.https.onCall(async (data, context) => {
-    const auth = getAuthFromContext(context)
-    return getUnvotedTheme(auth.uid)
-})
-
 const getUnvotedTheme = async (uid: string): Promise<ThemeResponse> => {
     const {docs} = await db.collection('theme').get()
     const unvotedThemes = docs.filter(doc => {
@@ -105,3 +80,28 @@ const getUnvotedTheme = async (uid: string): Promise<ThemeResponse> => {
         theme: themeDoc.data()['theme']
     }
 }
+
+export const likeTheme = functions.region('us-central1').https.onCall(async (data, context) => {
+    functions.logger.info("Liking: ", data)
+    const auth = getAuthFromContext(context);
+    functions.logger.info("Auth: ", auth);
+    await vote.voteTheme(data, auth, 'likes');
+    return getUnvotedTheme(auth.uid)
+})
+
+export const dislikeTheme = functions.region('us-central1').https.onCall(async (data, context) => {
+    const auth = getAuthFromContext(context)
+    await vote.voteTheme(data, auth, 'dislikes');
+    return getUnvotedTheme(auth.uid)
+})
+
+export const skipTheme = functions.region('us-central1').https.onCall(async (data, context) => {
+    const auth = getAuthFromContext(context)
+    await vote.voteTheme(data, auth);
+    return getUnvotedTheme(auth.uid)
+})
+
+export const getTheme = functions.region('us-central1').https.onCall(async (data, context) => {
+    const auth = getAuthFromContext(context)
+    return getUnvotedTheme(auth.uid)
+})
