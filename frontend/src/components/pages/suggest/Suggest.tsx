@@ -6,19 +6,23 @@ import Container from 'react-bootstrap/Container';
 import Alert from 'react-bootstrap/Alert';
 import Optional from '../../../utils/optional';
 import './Suggest.scss';
+import LoadingSpinner from '../../loadingSpinner/LoadingSpinner';
 
 function Suggest() {
     const themeClient = new ThemeClient();
     const [theme, setTheme] = useState("");
     const [lastSubmission, setLastSubmission] = useState(Optional.empty<string>());
     const [error, setError] = useState(Optional.empty<string>());
+    const [submitting, setSubmitting] = useState(false);
 
     const handleSubmit: FormEventHandler = event => {
         event.preventDefault();
         setError(Optional.empty<string>());
+        setSubmitting(true);
         themeClient.suggestTheme(theme)
             .then(() => setLastSubmission(Optional.of(theme)))
-            .catch(() => setError(Optional.of("Submission failed")));
+            .catch(() => setError(Optional.of("Submission failed")))
+            .then(() => setSubmitting(false));
         setTheme('');
     }
 
@@ -31,16 +35,18 @@ function Suggest() {
                     <Form.Label as="h1" className="mb-5">
                         Suggest a theme!
                     </Form.Label>
-                    <Form.Control
-                        type="text"
-                        size="lg"
-                        placeholder="Your awesome theme"
-                        value={theme}
-                        maxLength={50}
-                        // This regex is coupled with the theme suggestion endpoint
-                        onChange={e => setTheme(e.target.value.replace(/[^a-zA-Z0-9 ]/g, ""))}
-                        className="mb-5 theme-suggestion"
-                    />
+                    <LoadingSpinner load={!submitting}>
+                        <Form.Control
+                            type="text"
+                            size="lg"
+                            placeholder="Your awesome theme"
+                            value={theme}
+                            maxLength={50}
+                            // This regex is coupled with the theme suggestion endpoint
+                            onChange={e => setTheme(e.target.value.replace(/[^a-zA-Z0-9 ]/g, ""))}
+                            className="mb-5 theme-suggestion"
+                        />
+                    </LoadingSpinner>
                 </Form.Group>
                 <Button variant="primary" type="submit" disabled={!theme}>
                     Submit theme suggestion
