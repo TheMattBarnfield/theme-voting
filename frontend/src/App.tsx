@@ -8,6 +8,8 @@ import ProviderCollection from "./contexts/providerCollection";
 import TopNavbar from "./components/misc/navbar";
 import SignInModal from "./components/signInModal/signInModal";
 import ThemeClient from './client/themeClient';
+import Button from 'react-bootstrap/Button'
+import {functions} from "./firebase";
 
 
 function App() {
@@ -22,11 +24,19 @@ function App() {
         setSignInModalShowing(false);
     }
 
+    const handleUpVoteClick = () => {
+        var upVoteTheme = functions.httpsCallable('upVoteTheme');
+        upVoteTheme({themeId: ''}).then((result) => {
+
+        });
+    }
+
     return (
         <ProviderCollection>
             <Router>
                 <TopNavbar handleSignInModalOpen={handleSignInModalOpen}/>
                 <SignInModal isOpen={signInModalShowing} handleClose={handleSignInModalClose}/>
+                <Button onClick={handleUpVoteClick}>Upvote</Button>
                 <Switch>
                     <Route path="/suggest">
                         <Suggest/>
