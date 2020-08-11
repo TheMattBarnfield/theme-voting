@@ -25,7 +25,7 @@ function App() {
     }
 
     const handleUpVoteClick = () => {
-        const upVoteTheme = functions.httpsCallable('upVoteTheme');
+        const upVoteTheme = functions.httpsCallable('likeTheme');
         upVoteTheme({themeId: 'SKvT8DQQzXoCnhKDPCen'}).then((result) => {
             console.log(result.data)
         });
